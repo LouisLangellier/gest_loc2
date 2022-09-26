@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "262292692678",
+    "project_id": "gestloc-135bb",
+    "storage_bucket": "gestloc-135bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262292692678:android:ddc90c0263dcaa51ea01c7",
+        "android_client_info": {
+          "package_name": "com.example.gest_loc2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "262292692678-k72in4amoadb45j5j4iv2891df8knnq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9FN71EsAmP93Fwu37ceqzwfW1o8vkwMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "262292692678-k72in4amoadb45j5j4iv2891df8knnq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
