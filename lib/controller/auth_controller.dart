@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gest_loc/util/firebase_handler.dart';
 
 class AuthController extends StatefulWidget {
   const AuthController({Key? key}) : super(key: key);
@@ -116,7 +117,11 @@ class _AuthControllerState extends State<AuthController>
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (_formConnectionKey.currentState!.validate()) {
+                          authToFirebase();
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.pink,
                           shape: const StadiumBorder()),
@@ -212,7 +217,11 @@ class _AuthControllerState extends State<AuthController>
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (_formInscriptionKey.currentState!.validate()) {
+                          authToFirebase();
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.pink,
                           shape: const StadiumBorder()),
@@ -229,5 +238,28 @@ class _AuthControllerState extends State<AuthController>
         ],
       ),
     );
+  }
+
+  authToFirebase() {
+    hideKeyboard();
+    bool signIn = (_tabController.index == 0);
+    String name = _name.text.trim();
+    String firstName = _firstName.text.trim();
+    String mail = _mail.text.trim();
+    String password = _password.text.trim();
+
+    if (validText(mail) && validText(password)) {
+      if (signIn) {
+        FirebaseHandler().signIn(mail, password);
+      } else {
+        if (validText(name) && validText(firstName)) {
+          FirebaseHandler().createUser(mail, password, name, firstName);
+        }
+      }
+    }
+  }
+
+  bool validText(String string) {
+    return (string != "");
   }
 }
