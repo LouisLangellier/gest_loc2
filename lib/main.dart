@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gest_loc/controller/auth_controller.dart';
@@ -26,7 +27,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: const MainController(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.userChanges(),
+        builder: (BuildContext context, snapshot) {
+          return (snapshot.hasData)
+              ? MainController(memberUid: snapshot.data!.uid)
+              : const AuthController();
+        },
+      ),
     );
   }
 }

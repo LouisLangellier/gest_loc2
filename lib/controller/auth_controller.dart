@@ -251,6 +251,7 @@ class _AuthControllerState extends State<AuthController>
     if (validText(mail) && validText(password)) {
       if (signIn) {
         FirebaseHandler().signIn(mail, password);
+        print("connected");
       } else {
         if (validText(name) && validText(firstName)) {
           FirebaseHandler().createUser(mail, password, name, firstName);

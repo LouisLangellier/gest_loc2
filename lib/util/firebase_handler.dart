@@ -3,19 +3,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gest_loc/util/constant.dart';
 
 class FirebaseHandler {
+  //Authentication
 
   final authInstance = FirebaseAuth.instance;
 
   Future<User?> signIn(String mail, String password) async {
-    final userCredential = await authInstance.signInWithEmailAndPassword(email: mail, password: password);
+    final userCredential = await authInstance.signInWithEmailAndPassword(
+        email: mail, password: password);
     final User? user = userCredential.user;
     return user;
   }
 
-  Future<User?> createUser(String mail, String password, String name, String firstName) async {
-    final userCredential = await authInstance.createUserWithEmailAndPassword(email: mail, password: password);
+  Future<User?> createUser(
+      String mail, String password, String name, String firstName) async {
+    final userCredential = await authInstance.createUserWithEmailAndPassword(
+        email: mail, password: password);
     final User? user = userCredential.user;
-    if(user != null) {
+    if (user != null) {
       Map<String, dynamic> memberMap = {
         nameKey: name,
         firstNameKey: firstName,
@@ -27,11 +31,46 @@ class FirebaseHandler {
     return user;
   }
 
+  logOut() {
+    authInstance.signOut();
+  }
+
   //Database
   static final firestoreInstance = FirebaseFirestore.instance;
-  final fireUser = firestoreInstance.collection(memberRef);
+  final fireMember = firestoreInstance.collection(memberRef);
 
+  //User
+  //Ajout d'un utilisateur dans Firebase
   addUserToFirebase(Map<String, dynamic> map) {
-    fireUser.doc(map[uidKey]).set(map);
+    fireMember.doc(map[uidKey]).set(map);
   }
+
+  //Apartment
+  // Chaque appartement appartient à un membre
+  // Les appartements sont ajoutes dans une collection du membre
+  addApartmentToFirebase(Map<String, dynamic> map, String memberUid) {
+    fireMember
+        .doc(memberUid)
+        .collection(apartmentRef)
+        .doc(map[uidKey])
+        .set(map);
+  }
+
+  //Tenant
+  // Les locataires sont ajoutes par rapport à l'appartement qu'ils louent
+  // Ils sont ajoutes dans une collection d'un appartement
+  addTenantToFirebase(
+      Map<String, dynamic> map, String memberUid, String apartmentUid) {
+    fireMember
+        .doc(memberUid)
+        .collection(apartmentRef)
+        .doc(apartmentUid)
+        .collection(tenantRef)
+        .doc(map[uidKey])
+        .set(map);
+  }
+
+  //TODO ajouter les images des appartements dans Firebase
+
+  //TODO ajouter les images pour le profil ??
 }

@@ -1,22 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gest_loc/model/tenant.dart';
 import 'package:gest_loc/util/constant.dart';
 
-class Apartment {
+class Member {
   late String uid;
   late String name;
-  late String address;
-  late String description;
-  late Tenant tenant;
+  late String firstName;
   late DocumentReference<Map<String, dynamic>> ref;
 
-  Apartment(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  Member(DocumentSnapshot<Map<String, dynamic>> snapshot){
     ref = snapshot.reference;
     uid = snapshot.id;
     Map<String, dynamic>? datas = snapshot.data();
     name = datas?[nameKey];
-    address = datas?[addressKey];
-    description = datas?[descriptionKey];
-    tenant = datas?[tenantKey];
+    firstName = datas?[firstNameKey];
   }
 }
