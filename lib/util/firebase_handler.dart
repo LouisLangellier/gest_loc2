@@ -48,12 +48,12 @@ class FirebaseHandler {
   //Apartment
   // Chaque appartement appartient à un membre
   // Les appartements sont ajoutes dans une collection du membre
-  addApartmentToFirebase(Map<String, dynamic> map, String memberUid) {
-    fireMember
-        .doc(memberUid)
-        .collection(apartmentRef)
-        .doc(map[uidKey])
-        .set(map);
+  addApartmentToFirebase(String name, String address, String? description, String memberUid) {
+    // fireMember
+    //     .doc(memberUid)
+    //     .collection(apartmentRef)
+    //     .doc(map[uidKey])
+    //     .set(map);
   }
 
   //Tenant

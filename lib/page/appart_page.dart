@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gest_loc/model/member.dart';
-import 'package:gest_loc/page/add_apprt_page.dart';
+import 'package:gest_loc/page/add_appart_page.dart';
 
 class AppartPage extends StatefulWidget {
   Member member;
@@ -21,7 +21,7 @@ class _AppartPageState extends State<AppartPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddAppartPage()),
+            MaterialPageRoute(builder: (context) => AddAppartPage(member: widget.member,)),
           );
         },
         child: const Icon(Icons.add),
