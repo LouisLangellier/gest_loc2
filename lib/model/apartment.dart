@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gest_loc/model/tenant.dart';
 import 'package:gest_loc/util/constant.dart';
 
 class Apartment {
@@ -7,6 +6,7 @@ class Apartment {
   late String name;
   late String address;
   late String description;
+  late String imageUrl;
   late DocumentReference<Map<String, dynamic>> ref;
 
   Apartment(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -16,5 +16,6 @@ class Apartment {
     name = datas?[nameKey];
     address = datas?[addressKey];
     description = datas?[descriptionKey];
+    imageUrl = datas?[imageUrlKey];
   }
 }

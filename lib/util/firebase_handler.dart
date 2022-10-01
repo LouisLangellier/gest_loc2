@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:gest_loc/util/constant.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class FirebaseHandler {
@@ -40,6 +44,8 @@ class FirebaseHandler {
   static final firestoreInstance = FirebaseFirestore.instance;
   final fireMember = firestoreInstance.collection(memberRef);
 
+  static final storageRef = FirebaseStorage.instance.ref();
+
   //User
   //Ajout d'un utilisateur dans Firebase
   addUserToFirebase(Map<String, dynamic> map) {
@@ -49,8 +55,9 @@ class FirebaseHandler {
   //Apartment
   // Chaque appartement appartient à un membre
   // Les appartements sont ajoutes dans une collection du membre
-  addApartmentToFirebase(
-      String name, String address, String? description, String memberUid) {
+  addApartmentToFirebase(String memberUid, String name, String address,
+      String? description, XFile? file) async {
+    int date = DateTime.now().millisecondsSinceEpoch.toInt();
     Map<String, dynamic> apartmentMap = {
       nameKey: name,
       addressKey: address,
@@ -59,6 +66,23 @@ class FirebaseHandler {
     if (description != "") {
       apartmentMap[descriptionKey] = description;
     }
+    if (file != null) {
+      final ref = storageRef
+          .child(memberUid)
+          .child(apartmentMap[uidKey])
+          .child(date.toString());
+      final urlString = await addImageToStorage(ref, file);
+      apartmentMap[imageUrlKey] = urlString;
+      fireMember
+          .doc(memberUid)
+          .collection(apartmentRef)
+          .doc()
+          .set(apartmentMap);
+    } else {
+      const urlString = "";
+      apartmentMap[imageUrlKey] = urlString;
+      fireMember.doc(memberUid).collection("post").doc().set(apartmentMap);
+    }
     fireMember
         .doc(memberUid)
         .collection(apartmentRef)
@@ -66,18 +90,20 @@ class FirebaseHandler {
         .set(apartmentMap);
   }
 
+  Future<String> addImageToStorage(Reference ref, XFile file) async {
+    File newFile = File(file.path);
+    UploadTask task = ref.putFile(newFile);
+    TaskSnapshot snapshot = await task.whenComplete(() => null);
+    String urlString = await snapshot.ref.getDownloadURL();
+    return urlString;
+  }
+
   //Tenant
   // Les locataires sont ajoutes par rapport à l'appartement qu'ils louent
   // Ils sont ajoutes dans une collection d'un appartement
   addTenantToFirebase(
       Map<String, dynamic> map, String memberUid, String apartmentUid) {
-    fireMember
-        .doc(memberUid)
-        .collection(apartmentRef)
-        .doc(apartmentUid)
-        .collection(tenantRef)
-        .doc(map[uidKey])
-        .set(map);
+    fireMember.doc(memberUid).collection(locationRef).doc(map[uidKey]).set(map);
   }
 
   //TODO ajouter les images des appartements dans Firebase

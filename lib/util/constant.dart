@@ -7,7 +7,8 @@ String ageKey = "age";
 String phoneNumberKey = "phoneNumber";
 String descriptionKey = "description";
 String tenantKey = "tenant";
+String imageUrlKey = "imageUrl";
 
 String memberRef = "member";
 String apartmentRef = "apartment";
-String tenantRef = "tenant";
+String locationRef = "location";

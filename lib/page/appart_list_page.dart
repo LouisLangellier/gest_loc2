@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gest_loc/controller/loading_controller.dart';
 import 'package:gest_loc/model/apartment.dart';
 import 'package:gest_loc/model/member.dart';
-import 'package:gest_loc/page/add_appart_page.dart';
+import 'package:gest_loc/page/add_modify_appart_page.dart';
 import 'package:gest_loc/page/appart_page.dart';
 import 'package:gest_loc/util/constant.dart';
 import 'package:gest_loc/util/firebase_handler.dart';
@@ -40,7 +40,7 @@ class _AppartListPageState extends State<AppartListPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddAppartPage(
+                      builder: (context) => AddModifyAppartPage(
                         member: widget.member,
                       ),
                     ),
@@ -88,7 +88,7 @@ class _AppartListPageState extends State<AppartListPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddAppartPage(
+                      builder: (context) => AddModifyAppartPage(
                         member: widget.member,
                       ),
                     ),

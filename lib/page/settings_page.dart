@@ -16,13 +16,16 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(10),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 20, left: 10, right: 10, bottom: 7.5),
             child: InkWell(
               //TODO : onTap: (){}, Action pour ouvrir profil
               child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
                 elevation: 5,
-                child: ListTile(
+                child: const ListTile(
                   title: Text(
                     "Profil",
                   ),
@@ -32,15 +35,18 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const Divider(),
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(
+                top: 7.5, left: 10, right: 10, bottom: 7.5),
             child: InkWell(
               onTap: () {
                 FirebaseHandler().logOut();
                 //TODO ajouter une demande de confirmation
               },
-              child: const Card(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
                 elevation: 5,
-                child: ListTile(
+                child: const ListTile(
                   title: Text(
                     "Se déconnecter",
                     style: TextStyle(color: Colors.red),
