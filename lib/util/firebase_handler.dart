@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gest_loc/util/constant.dart';
+import 'package:uuid/uuid.dart';
 
 class FirebaseHandler {
   //Authentication
@@ -48,12 +49,21 @@ class FirebaseHandler {
   //Apartment
   // Chaque appartement appartient à un membre
   // Les appartements sont ajoutes dans une collection du membre
-  addApartmentToFirebase(String name, String address, String? description, String memberUid) {
-    // fireMember
-    //     .doc(memberUid)
-    //     .collection(apartmentRef)
-    //     .doc(map[uidKey])
-    //     .set(map);
+  addApartmentToFirebase(
+      String name, String address, String? description, String memberUid) {
+    Map<String, dynamic> apartmentMap = {
+      nameKey: name,
+      addressKey: address,
+      uidKey: const Uuid().v1(),
+    };
+    if (description != "") {
+      apartmentMap[descriptionKey] = description;
+    }
+    fireMember
+        .doc(memberUid)
+        .collection(apartmentRef)
+        .doc(apartmentMap[uidKey])
+        .set(apartmentMap);
   }
 
   //Tenant

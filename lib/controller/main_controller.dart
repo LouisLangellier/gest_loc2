@@ -62,11 +62,9 @@ class _MainControllerState extends State<MainController> {
               setState(() => _currentIndex = index);
             },
             children: [
-              Center(
-                  child: CalendarPage(
-                member: member!,
-              )),
+              Center(child: CalendarPage(member: member!)),
               Center(child: AppartPage(member: member!)),
+              Center(child: SettingsPage(member: member!)),
               Center(child: SettingsPage(member: member!)),
             ],
           ),
@@ -86,6 +84,11 @@ class _MainControllerState extends State<MainController> {
             BottomNavyBarItem(
               icon: const Icon(Icons.house),
               title: const Center(child: Text("Apparts")),
+              activeColor: Colors.pink,
+            ),
+            BottomNavyBarItem(
+              icon: const Icon(Icons.message),
+              title: const Center(child: Text("Messages")),
               activeColor: Colors.pink,
             ),
             BottomNavyBarItem(

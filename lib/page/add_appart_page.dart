@@ -39,13 +39,19 @@ class _AddAppartPageState extends State<AddAppartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Center(
+          child: Text("GestLoc"),
+        ),
+        automaticallyImplyLeading: false,
+      ),
       body: Form(
         key: _formAddAppartKey,
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                  top: 7.5, left: 15, right: 15, bottom: 7.5),
+                  top: 20, left: 15, right: 15, bottom: 7.5),
               child: TextFormField(
                 controller: _name,
                 validator: (String? value) =>
@@ -91,28 +97,49 @@ class _AddAppartPageState extends State<AddAppartPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50.0),
                     ),
-                    hintText: "Deescription",
+                    hintText: "Description",
                     prefixIcon: const Icon(Icons.password)),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  top: 7.5, left: 15, right: 15, bottom: 15),
+                  top: 7.5, left: 15, right: 15, bottom: 7.5),
+              child: SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: const StadiumBorder()),
+                  child: const Text(
+                    "Annuler",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 7.5, left: 15, right: 15, bottom: 7.5),
               child: SizedBox(
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formAddAppartKey.currentState!.validate()) {
-                      FirebaseHandler()
-                          .addApartmentToFirebase(_name.text, _address.text, _description.text, widget.member.uid);
+                      FirebaseHandler().addApartmentToFirebase(_name.text,
+                          _address.text, _description.text, widget.member.uid);
                     }
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.pink,
+                      backgroundColor: Colors.green,
                       shape: const StadiumBorder()),
                   child: const Text(
-                    "Inscription",
+                    "Ajouter",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
