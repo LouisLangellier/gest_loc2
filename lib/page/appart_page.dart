@@ -23,26 +23,24 @@ class _AppartPageState extends State<AppartPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: Center(
-                child: CircleAvatar(
-                  radius: 120,
-                  backgroundColor: Colors.pink,
-                  child: CircleAvatar(
-                    radius: 117,
-                    backgroundImage: NetworkImage(widget.apartment.imageUrl),
-                  ),
-                ),
+              padding: const EdgeInsets.only(top: 25, bottom: 20),
+              child: Image(
+                height: MediaQuery.of(context).size.height * 0.3,
+                image: NetworkImage(widget.apartment.imageUrl),
+                fit: BoxFit.cover,
               ),
             ),
             const Divider(),
-            Column(
-              children: [
-                Text("Nom : ${widget.apartment.name}"),
-                Text("Adresse : ${widget.apartment.address}"),
-                Text("Description : ${widget.apartment.description}")
-              ],
-            )
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                  Text("Nom : ${widget.apartment.name}"),
+                  Text("Adresse : ${widget.apartment.address}"),
+                  Text("Description : ${widget.apartment.description}")
+                ],
+              ),
+            ),
           ],
         ),
       ),

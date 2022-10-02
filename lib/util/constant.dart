@@ -6,10 +6,16 @@ String addressKey = "address";
 String ageKey = "age";
 String phoneNumberKey = "phoneNumber";
 String descriptionKey = "description";
-String tenantKey = "tenant";
 String imageUrlKey = "imageUrl";
 String memberUidKey = "memberUid";
 String dateKey = "date";
+String apartmentUidKey = "apartmentUid";
+String tenantNameKey = "tenantName";
+String tenantFirstNameKey = "tenantFirstName";
+String tenantMailKey = "tenantMail";
+String tenantPhoneKey = "tenantPhoneKey";
+String dateBeginKey = "dateBegin";
+String dateEndKey = "dateEnd";
 
 String memberRef = "member";
 String apartmentRef = "apartment";

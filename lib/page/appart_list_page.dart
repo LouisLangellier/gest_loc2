@@ -75,7 +75,14 @@ class _AppartListPageState extends State<AppartListPage> {
                             borderRadius: BorderRadius.circular(20)),
                         elevation: 8,
                         child: ListTile(
-                          //TODO : ajouter une image de l'appartement avec leading
+                          leading: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.pink,
+                            child: CircleAvatar(
+                              radius: 27,
+                              backgroundImage: NetworkImage(apartment.imageUrl),
+                            ),
+                          ),
                           title: Text(apartment.name),
                           subtitle: Text(apartment.description),
                         ),

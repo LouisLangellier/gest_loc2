@@ -7,15 +7,15 @@ import 'package:gest_loc/util/firebase_handler.dart';
 
 import '../controller/loading_controller.dart';
 
-class CalendarPage extends StatefulWidget {
+class LocationListPage extends StatefulWidget {
   Member member;
-  CalendarPage({Key? key, required this.member}) : super(key: key);
+  LocationListPage({Key? key, required this.member}) : super(key: key);
 
   @override
-  State<CalendarPage> createState() => _CalendarPageState();
+  State<LocationListPage> createState() => _LocationListPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class _LocationListPageState extends State<LocationListPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(

@@ -4,7 +4,8 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:gest_loc/model/member.dart';
 import 'package:gest_loc/page/appart_list_page.dart';
-import 'package:gest_loc/page/calendar_page.dart';
+import 'package:gest_loc/page/location_list_page.dart';
+import 'package:gest_loc/page/contact_list_page.dart';
 import 'package:gest_loc/page/settings_page.dart';
 import 'package:gest_loc/util/firebase_handler.dart';
 import 'package:gest_loc/controller/loading_controller.dart';
@@ -62,9 +63,9 @@ class _MainControllerState extends State<MainController> {
               setState(() => _currentIndex = index);
             },
             children: [
-              Center(child: CalendarPage(member: member!)),
+              Center(child: LocationListPage(member: member!)),
               Center(child: AppartListPage(member: member!)),
-              Center(child: SettingsPage(member: member!)),
+              Center(child: ContactListPage(member: member!)),
               Center(child: SettingsPage(member: member!)),
             ],
           ),
@@ -78,7 +79,7 @@ class _MainControllerState extends State<MainController> {
           items: [
             BottomNavyBarItem(
               icon: const Icon(Icons.calendar_month),
-              title: const Center(child: Text("Calendrier")),
+              title: const Center(child: Text("Locations")),
               activeColor: Colors.pink,
             ),
             BottomNavyBarItem(

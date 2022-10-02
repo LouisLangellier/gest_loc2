@@ -119,9 +119,8 @@ class FirebaseHandler {
   //Tenant
   // Les locataires sont ajoutes par rapport à l'appartement qu'ils louent
   // Ils sont ajoutes dans une collection d'un appartement
-  addTenantToFirebase(
-      Map<String, dynamic> map, String memberUid, String apartmentUid) {
-    fireMember.doc(memberUid).collection(locationRef).doc(map[uidKey]).set(map);
+  addLocationToFirebase(String memberUid, String apartmentUid) {
+    //fireMember.doc(memberUid).collection(locationRef).doc(map[uidKey]).set(map);
   }
 
   //TODO ajouter les images pour le profil ??

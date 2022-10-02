@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gest_loc/controller/auth_controller.dart';
 import 'package:gest_loc/controller/main_controller.dart';
-import 'package:gest_loc/page/calendar_page.dart';
+import 'package:gest_loc/page/location_list_page.dart';
 
 import 'firebase_options.dart';
 
