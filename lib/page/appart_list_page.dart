@@ -25,6 +25,7 @@ class _AppartListPageState extends State<AppartListPage> {
             .fireMember
             .doc(widget.member.uid)
             .collection(apartmentRef)
+            .orderBy("name", descending: false)
             .snapshots(),
         builder: (BuildContext context, snapshots) {
           if (snapshots.data == null) {

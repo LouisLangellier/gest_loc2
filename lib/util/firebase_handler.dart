@@ -81,13 +81,8 @@ class FirebaseHandler {
     } else {
       const urlString = "";
       apartmentMap[imageUrlKey] = urlString;
-      fireMember.doc(memberUid).collection("post").doc().set(apartmentMap);
+      fireMember.doc(memberUid).collection(apartmentRef).doc().set(apartmentMap);
     }
-    fireMember
-        .doc(memberUid)
-        .collection(apartmentRef)
-        .doc(apartmentMap[uidKey])
-        .set(apartmentMap);
   }
 
   Future<String> addImageToStorage(Reference ref, XFile file) async {

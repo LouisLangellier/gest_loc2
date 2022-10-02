@@ -68,7 +68,7 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                       hintText: "Nom de l'appartement",
-                      prefixIcon: const Icon(Icons.password)),
+                      prefixIcon: const Icon(Icons.apartment)),
                 ),
               ),
               Padding(
@@ -85,7 +85,7 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                       hintText: "Adresse de l'appartement",
-                      prefixIcon: const Icon(Icons.password)),
+                      prefixIcon: const Icon(Icons.place)),
                 ),
               ),
               //TODO changer le textFormField en TextArea
@@ -103,14 +103,14 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                       hintText: "Description",
-                      prefixIcon: const Icon(Icons.password)),
+                      prefixIcon: const Icon(Icons.info)),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 7.5, left: 15, right: 15, bottom: 7.5),
+                    top: 7.5, left: 20, right: 15, bottom: 7.5),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text("Ajouter des photos"),
                     IconButton(
@@ -123,7 +123,8 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
                 ),
               ),
               if (image != null)
-                Expanded(
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: [
                       Expanded(child: Image.file(File(image!.path))),
