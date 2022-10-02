@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:gest_loc/util/constant.dart';
+import 'package:gest_loc/model/apartment.dart';
 import 'package:gest_loc/util/firebase_handler.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -11,7 +9,8 @@ import '../model/member.dart';
 
 class AddModifyAppartPage extends StatefulWidget {
   Member member;
-  AddModifyAppartPage({super.key, required this.member});
+  Apartment? apartment;
+  AddModifyAppartPage({super.key, required this.member, this.apartment});
 
   @override
   State<AddModifyAppartPage> createState() => _AddModifyAppartPageState();
@@ -27,9 +26,16 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
   @override
   void initState() {
     super.initState();
-    _name = TextEditingController();
-    _address = TextEditingController();
-    _description = TextEditingController();
+    if (widget.apartment != null) {
+      _name.text = widget.apartment!.name;
+      _address.text = widget.apartment!.address;
+      _description.text = widget.apartment!.description;
+      //TODO : recupérer l'image si modification d'un appartement
+    } else {
+      _name = TextEditingController();
+      _address = TextEditingController();
+      _description = TextEditingController();
+    }
   }
 
   @override

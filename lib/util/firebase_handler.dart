@@ -62,6 +62,8 @@ class FirebaseHandler {
       nameKey: name,
       addressKey: address,
       uidKey: const Uuid().v1(),
+      memberUidKey: memberUid,
+      dateKey: date
     };
     if (description != "") {
       apartmentMap[descriptionKey] = description;
@@ -76,12 +78,16 @@ class FirebaseHandler {
       fireMember
           .doc(memberUid)
           .collection(apartmentRef)
-          .doc()
+          .doc(apartmentMap[uidKey])
           .set(apartmentMap);
     } else {
       const urlString = "";
       apartmentMap[imageUrlKey] = urlString;
-      fireMember.doc(memberUid).collection(apartmentRef).doc().set(apartmentMap);
+      fireMember
+          .doc(memberUid)
+          .collection(apartmentRef)
+          .doc(apartmentMap[uidKey])
+          .set(apartmentMap);
     }
   }
 
@@ -91,6 +97,15 @@ class FirebaseHandler {
     TaskSnapshot snapshot = await task.whenComplete(() => null);
     String urlString = await snapshot.ref.getDownloadURL();
     return urlString;
+  }
+
+  deleteApartmentFromFirebase(String memberUid, String apartmentUid, int date) {
+    storageRef.child(memberUid).child(apartmentUid).child(date.toString()).delete();
+    fireMember
+        .doc(memberUid)
+        .collection(apartmentRef)
+        .doc(apartmentUid)
+        .delete();
   }
 
   //Tenant

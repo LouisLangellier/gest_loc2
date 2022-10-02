@@ -7,6 +7,8 @@ class Apartment {
   late String address;
   late String description;
   late String imageUrl;
+  late String memberUid;
+  late int date;
   late DocumentReference<Map<String, dynamic>> ref;
 
   Apartment(DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -17,5 +19,7 @@ class Apartment {
     address = datas?[addressKey];
     description = datas?[descriptionKey];
     imageUrl = datas?[imageUrlKey];
+    memberUid = datas?[memberUidKey];
+    date = datas?[dateKey];
   }
 }

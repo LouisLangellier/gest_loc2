@@ -8,6 +8,8 @@ String phoneNumberKey = "phoneNumber";
 String descriptionKey = "description";
 String tenantKey = "tenant";
 String imageUrlKey = "imageUrl";
+String memberUidKey = "memberUid";
+String dateKey = "date";
 
 String memberRef = "member";
 String apartmentRef = "apartment";
