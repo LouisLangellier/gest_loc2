@@ -60,23 +60,36 @@ class _AppartPageState extends State<AppartPage> {
               style: TextStyle(color: Colors.black),
             ),
           ),
-          TextButton.icon(
+          ElevatedButton.icon(
             onPressed: () {
-              FirebaseHandler().deleteApartmentFromFirebase(
-                  widget.apartment.memberUid,
-                  widget.apartment.uid,
-                  widget.apartment.date);
-              //TODO : demande de confirmation de suppression
-              Navigator.pop(context);
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("Confirmation de suppression"),
+                  content:
+                      Text("Voulez-vous supprimer ${widget.apartment.name} ?"),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Annuler")),
+                    ElevatedButton(
+                        onPressed: () {
+                          FirebaseHandler().deleteApartmentFromFirebase(
+                              widget.apartment.memberUid,
+                              widget.apartment.uid,
+                              widget.apartment.date);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Confirmer")),
+                  ],
+                ),
+              );
             },
-            icon: const Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
-            label: const Text(
-              "Supprimer",
-              style: TextStyle(color: Colors.red),
-            ),
+            label: const Text("Supprimer"),
+            icon: const Icon(Icons.delete),
           ),
         ],
       ),

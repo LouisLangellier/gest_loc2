@@ -82,6 +82,8 @@ class FirebaseHandler {
           .set(apartmentMap);
     } else {
       const urlString = "";
+      date = 0;
+      apartmentMap[dateKey] = date;
       apartmentMap[imageUrlKey] = urlString;
       fireMember
           .doc(memberUid)
@@ -100,7 +102,13 @@ class FirebaseHandler {
   }
 
   deleteApartmentFromFirebase(String memberUid, String apartmentUid, int date) {
-    storageRef.child(memberUid).child(apartmentUid).child(date.toString()).delete();
+    if (date != 0) {
+      storageRef
+          .child(memberUid)
+          .child(apartmentUid)
+          .child(date.toString())
+          .delete();
+    }
     fireMember
         .doc(memberUid)
         .collection(apartmentRef)
@@ -115,8 +123,6 @@ class FirebaseHandler {
       Map<String, dynamic> map, String memberUid, String apartmentUid) {
     fireMember.doc(memberUid).collection(locationRef).doc(map[uidKey]).set(map);
   }
-
-  //TODO ajouter les images des appartements dans Firebase
 
   //TODO ajouter les images pour le profil ??
 }
