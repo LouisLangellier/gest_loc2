@@ -128,7 +128,6 @@ class FirebaseHandler {
       imageUrlKey: newUrl
     };
     fireMember.doc(uid).collection(apartmentRef).doc(apartmentUid).update(map);
-    //deleteImageFromStorage(url);
   }
 
   deleteApartmentFromFirebase(String memberUid, String apartmentUid, int date) {
