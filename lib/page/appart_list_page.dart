@@ -34,7 +34,7 @@ class _AppartListPageState extends State<AppartListPage> {
           if (snapshots.data!.docs.isEmpty) {
             return Scaffold(
               body: const Center(
-                child: Text("Ajoutez des appartements pour commencer !"),
+                child: Text("Ajoutez des appartements pour les louer !"),
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
