@@ -26,15 +26,14 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
   @override
   void initState() {
     super.initState();
+    _name = TextEditingController();
+    _address = TextEditingController();
+    _description = TextEditingController();
     if (widget.apartment != null) {
       _name.text = widget.apartment!.name;
       _address.text = widget.apartment!.address;
       _description.text = widget.apartment!.description;
       //TODO : recupérer l'image si modification d'un appartement
-    } else {
-      _name = TextEditingController();
-      _address = TextEditingController();
-      _description = TextEditingController();
     }
   }
 
@@ -118,7 +117,9 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Ajouter des photos"),
+                    (widget.apartment != null)
+                        ? const Text("Modifier la photo")
+                        : const Text("Ajouter une photo"),
                     IconButton(
                         onPressed: (() => takePicture(ImageSource.camera)),
                         icon: const Icon(Icons.add_a_photo)),
@@ -133,7 +134,8 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
                   height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: [
-                      Expanded(child: Image.file(File(image!.path))),
+                      Expanded(
+                          child: Image.file(File(image!.path))),
                       ElevatedButton.icon(
                         onPressed: () {
                           setState(() {
@@ -176,22 +178,39 @@ class _AddModifyAppartPageState extends State<AddModifyAppartPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formAddAppartKey.currentState!.validate()) {
-                        FirebaseHandler().addApartmentToFirebase(
-                            widget.member.uid,
-                            _name.text,
-                            _address.text,
-                            _description.text,
-                            image);
+                        if (widget.apartment != null) {
+                          FirebaseHandler().modifyApartmentToFirebase(
+                              widget.member.uid,
+                              widget.apartment!.uid,
+                              widget.apartment!.imageUrl,
+                              _name.text,
+                              _address.text,
+                              _description.text,
+                              image);
+                          Navigator.pop(context);
+                        } else {
+                          FirebaseHandler().addApartmentToFirebase(
+                              widget.member.uid,
+                              _name.text,
+                              _address.text,
+                              _description.text,
+                              image);
+                        }
                       }
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         shape: const StadiumBorder()),
-                    child: const Text(
-                      "Ajouter",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: (widget.apartment != null)
+                        ? const Text(
+                            "Modifier",
+                            style: TextStyle(color: Colors.white),
+                          )
+                        : const Text(
+                            "Ajouter",
+                            style: TextStyle(color: Colors.white),
+                          ),
                   ),
                 ),
               ),

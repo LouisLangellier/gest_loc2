@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gest_loc/model/apartment.dart';
+import 'package:gest_loc/model/member.dart';
+import 'package:gest_loc/page/add_modify_appart_page.dart';
 import 'package:gest_loc/util/constant.dart';
 import 'package:gest_loc/util/firebase_handler.dart';
 
 class AppartPage extends StatefulWidget {
+  Member member;
   Apartment apartment;
-  AppartPage({super.key, required this.apartment});
+  AppartPage({super.key, required this.apartment, required this.member});
 
   @override
   State<AppartPage> createState() => _AppartPageState();
@@ -48,7 +51,17 @@ class _AppartPageState extends State<AppartPage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           TextButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddModifyAppartPage(
+                    member: widget.member,
+                    apartment: widget.apartment,
+                  ),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.edit,
               color: Colors.black,

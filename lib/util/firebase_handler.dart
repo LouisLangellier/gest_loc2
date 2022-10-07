@@ -93,12 +93,42 @@ class FirebaseHandler {
     }
   }
 
-  Future<String> addImageToStorage(Reference ref, XFile file) async {
-    File newFile = File(file.path);
-    UploadTask task = ref.putFile(newFile);
-    TaskSnapshot snapshot = await task.whenComplete(() => null);
-    String urlString = await snapshot.ref.getDownloadURL();
-    return urlString;
+  modifyApartmentToFirebase(String memberUid, String apartmentUid, String? url,
+      String? name, String? address, String? description, XFile? file) async {
+    int date = DateTime.now().millisecondsSinceEpoch.toInt();
+    Map<String, dynamic> apartmentMap = {};
+    if (name != "" || name != null) {
+      apartmentMap[nameKey] = name;
+    }
+    if (address != "" || address != null) {
+      apartmentMap[addressKey] = address;
+    }
+    if (description != "" || description != null) {
+      apartmentMap[descriptionKey] = description;
+    }
+    if (file != null) {
+      modifyImageToStorage(file, apartmentUid, date);
+      apartmentMap[dateKey] = date;
+      fireMember
+          .doc(memberUid)
+          .collection(apartmentRef)
+          .doc(apartmentUid)
+          .update(apartmentMap);
+    } else {
+      fireMember
+          .doc(memberUid)
+          .collection(apartmentRef)
+          .doc(apartmentUid)
+          .update(apartmentMap);
+    }
+  }
+
+  modifyApartmentUrl(String newUrl, String uid, String apartmentUid) {
+    Map<String, dynamic> map = {
+      imageUrlKey: newUrl
+    };
+    fireMember.doc(uid).collection(apartmentRef).doc(apartmentUid).update(map);
+    //deleteImageFromStorage(url);
   }
 
   deleteApartmentFromFirebase(String memberUid, String apartmentUid, int date) {
@@ -119,6 +149,7 @@ class FirebaseHandler {
   //Tenant
   // Les locataires sont ajoutes par rapport à l'appartement qu'ils louent
   // Ils sont ajoutes dans une collection d'un appartement
+
   addLocationToFirebase(String memberUid, String apartmentUid, String name,
       String firstName, String mail, String phone, int dateBegin, int dateEnd) {
     Map<String, dynamic> map = {
@@ -132,5 +163,29 @@ class FirebaseHandler {
       apartmentUidKey: apartmentUid,
     };
     fireMember.doc(memberUid).collection(locationRef).doc(map[uidKey]).set(map);
+  }
+
+  //Storage
+
+  Future<String> addImageToStorage(Reference ref, XFile file) async {
+    File newFile = File(file.path);
+    UploadTask task = ref.putFile(newFile);
+    TaskSnapshot snapshot = await task.whenComplete(() => null);
+    String urlString = await snapshot.ref.getDownloadURL();
+    return urlString;
+  }
+
+  modifyImageToStorage(
+      XFile file, String apartmentUid, int date) {
+    String uid = authInstance.currentUser!.uid;
+    final ref =
+        storageRef.child(uid).child(apartmentUid).child(date.toString());
+    final urlString = addImageToStorage(ref, file).then((value) {
+      modifyApartmentUrl(value, uid, apartmentUid);
+    });
+  }
+
+  deleteImageFromStorage(String url) {
+    FirebaseStorage.instance.refFromURL(url).delete();
   }
 }

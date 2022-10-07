@@ -65,8 +65,8 @@ class _AppartListPageState extends State<AppartListPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                AppartPage(apartment: apartment),
+                            builder: (context) => AppartPage(
+                                member: widget.member, apartment: apartment),
                           ),
                         );
                       },
