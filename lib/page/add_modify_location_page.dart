@@ -16,6 +16,8 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
   late TextEditingController _firstName;
   late TextEditingController _mail;
   late TextEditingController _phone;
+  DateTime? _begin;
+  DateTime? _end;
 
   @override
   void initState() {
@@ -115,6 +117,37 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
                       ),
                       hintText: "Téléphone du locataire",
                       prefixIcon: const Icon(Icons.phone)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 7.5, left: 30, right: 30, bottom: 7.5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Date de début :"),
+                    (_begin == null)
+                        ? ElevatedButton(
+                            onPressed: () {},
+                            child: const Text("Ajouter une date"))
+                        : Text(
+                            "${_begin!.day} ${_begin!.month} ${_begin!.year}")
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 7.5, left: 30, right: 30, bottom: 7.5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Date de fin :"),
+                    (_end == null)
+                        ? ElevatedButton(
+                            onPressed: () {},
+                            child: const Text("Ajouter une date"))
+                        : Text("${_end!.day} ${_end!.month} ${_end!.year}")
+                  ],
                 ),
               ),
               Padding(
