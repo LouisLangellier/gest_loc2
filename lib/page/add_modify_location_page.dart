@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gest_loc/util/firebase_handler.dart';
 
 import '../model/member.dart';
+import '../util/utils.dart';
 
 class AddModifyLocationPage extends StatefulWidget {
   Member member;
@@ -16,8 +18,8 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
   late TextEditingController _firstName;
   late TextEditingController _mail;
   late TextEditingController _phone;
-  DateTime? _begin;
-  DateTime? _end;
+  late DateTime _begin;
+  late DateTime _end;
 
   @override
   void initState() {
@@ -26,6 +28,8 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
     _firstName = TextEditingController();
     _mail = TextEditingController();
     _phone = TextEditingController();
+    _begin = DateTime.now();
+    _end = DateTime.now().add(const Duration(days: 1));
   }
 
   @override
@@ -122,33 +126,7 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
               Padding(
                 padding: const EdgeInsets.only(
                     top: 7.5, left: 30, right: 30, bottom: 7.5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Date de début :"),
-                    (_begin == null)
-                        ? ElevatedButton(
-                            onPressed: () {},
-                            child: const Text("Ajouter une date"))
-                        : Text(
-                            "${_begin!.day} ${_begin!.month} ${_begin!.year}")
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 7.5, left: 30, right: 30, bottom: 7.5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Date de fin :"),
-                    (_end == null)
-                        ? ElevatedButton(
-                            onPressed: () {},
-                            child: const Text("Ajouter une date"))
-                        : Text("${_end!.day} ${_end!.month} ${_end!.year}")
-                  ],
-                ),
+                child: buildDateTimePickers(),
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -178,7 +156,9 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
                   height: 55,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (_formLocationKey.currentState!.validate()) {}
+                      if (_formLocationKey.currentState!.validate()) {
+                        addLocationToFirebase();
+                      }
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
@@ -196,5 +176,156 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
         ),
       ),
     );
+  }
+
+  Widget buildDateTimePickers() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 5),
+          child: buildBegin(),
+        ),
+        buildEnd(),
+      ],
+    );
+  }
+
+  Widget buildBegin() {
+    return buildHeader(
+      header: "De",
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: buildDropdownField(
+                text: Utils.toDate(_begin),
+                onClick: () {
+                  pickFromDateTime(pickDate: true);
+                }),
+          ),
+          Expanded(
+            child: buildDropdownField(
+                text: Utils.toTime(_begin),
+                onClick: () {
+                  pickFromDateTime(pickDate: false);
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildEnd() {
+    return buildHeader(
+      header: "Jusqu'à",
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: buildDropdownField(
+                text: Utils.toDate(_end),
+                onClick: () {
+                  pickToDateTime(pickDate: true);
+                }),
+          ),
+          Expanded(
+            child: buildDropdownField(
+                text: Utils.toTime(_end),
+                onClick: () {
+                  pickToDateTime(pickDate: false);
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDropdownField({
+    required String text,
+    required VoidCallback onClick,
+  }) {
+    return ListTile(
+      title: Text(text),
+      trailing: const Icon(Icons.arrow_drop_down),
+      onTap: onClick,
+    );
+  }
+
+  Widget buildHeader({
+    required String header,
+    required Widget child,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          header,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        child
+      ],
+    );
+  }
+
+  Future pickFromDateTime({required bool pickDate}) async {
+    final date = await pickDateTime(_begin, pickDate: pickDate);
+    if (date == null) return;
+
+    if (date.isAfter(_end)) {
+      _end =
+          DateTime(date.year, date.month, date.day + 1, _end.hour, _end.minute);
+    }
+
+    setState(() {
+      _begin = date;
+    });
+  }
+
+  Future pickToDateTime({required bool pickDate}) async {
+    final date = await pickDateTime(_end,
+        pickDate: pickDate, firstDate: pickDate ? _begin : null);
+    if (date == null) return;
+
+    setState(() {
+      _end = date;
+    });
+  }
+
+  Future<DateTime?> pickDateTime(
+    DateTime initialDate, {
+    required bool pickDate,
+    DateTime? firstDate,
+  }) async {
+    if (pickDate) {
+      final date = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: firstDate ?? DateTime.now(),
+        lastDate: DateTime(2101),
+      );
+      if (date == null) return null;
+
+      final time =
+          Duration(hours: initialDate.hour, minutes: initialDate.minute);
+      return date.add(time);
+    } else {
+      final timeOfDay = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initialDate),
+      );
+
+      if (timeOfDay == null) return null;
+      final date =
+          DateTime(initialDate.year, initialDate.month, initialDate.day);
+      final time = Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute);
+
+      return date.add(time);
+    }
+  }
+
+  addLocationToFirebase() {
+    int begin = Utils.dateTimeToInt(_begin);
+    int end = Utils.dateTimeToInt(_end);
+    //FirebaseHandler().addLocationToFirebase(widget.member.uid, apartmentUid, name, firstName, mail, phone, dateBegin, dateEnd)
   }
 }
