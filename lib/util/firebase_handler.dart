@@ -124,9 +124,7 @@ class FirebaseHandler {
   }
 
   modifyApartmentUrl(String newUrl, String uid, String apartmentUid) {
-    Map<String, dynamic> map = {
-      imageUrlKey: newUrl
-    };
+    Map<String, dynamic> map = {imageUrlKey: newUrl};
     fireMember.doc(uid).collection(apartmentRef).doc(apartmentUid).update(map);
   }
 
@@ -143,6 +141,14 @@ class FirebaseHandler {
         .collection(apartmentRef)
         .doc(apartmentUid)
         .delete();
+  }
+
+  Future<List<dynamic>> getApartmentsNames(String memberUid) async {
+    QuerySnapshot querySnapshot =
+        await fireMember.doc(memberUid).collection(apartmentRef).get();
+    final allApartmentsNames =
+        querySnapshot.docs.map((doc) => doc.get("name")).toList();
+    return allApartmentsNames;
   }
 
   //Tenant
@@ -174,8 +180,7 @@ class FirebaseHandler {
     return urlString;
   }
 
-  modifyImageToStorage(
-      XFile file, String apartmentUid, int date) {
+  modifyImageToStorage(XFile file, String apartmentUid, int date) {
     String uid = authInstance.currentUser!.uid;
     final ref =
         storageRef.child(uid).child(apartmentUid).child(date.toString());

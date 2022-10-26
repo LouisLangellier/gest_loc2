@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:gest_loc/util/constant.dart';
 import 'package:gest_loc/util/firebase_handler.dart';
 
 import '../model/member.dart';
@@ -13,6 +16,7 @@ class AddModifyLocationPage extends StatefulWidget {
 }
 
 class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
+  late var selected;
   final _formLocationKey = GlobalKey<FormState>();
   late TextEditingController _name;
   late TextEditingController _firstName;
@@ -20,6 +24,7 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
   late TextEditingController _phone;
   late DateTime _begin;
   late DateTime _end;
+  late List<dynamic> apartmentsName;
 
   @override
   void initState() {
@@ -30,6 +35,7 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
     _phone = TextEditingController();
     _begin = DateTime.now();
     _end = DateTime.now().add(const Duration(days: 1));
+    //apartmentsName = FirebaseHandler().getApartmentsNames(widget.member.uid);
   }
 
   @override
@@ -55,6 +61,40 @@ class _AddModifyLocationPageState extends State<AddModifyLocationPage> {
           key: _formLocationKey,
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 15, left: 15, right: 15, bottom: 7.5),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseHandler()
+                      .fireMember
+                      .doc(widget.member.uid)
+                      .collection(apartmentRef)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Text("Pas d'apparts");
+                    } else {
+                      return DropdownSearch<String>(
+                          items: snapshot.data!.docs
+                              .map((DocumentSnapshot document) {
+                                Map<String, dynamic> data =
+                                    document.data()! as Map<String, dynamic>;
+                                return data["name"];
+                              })
+                              .toList()
+                              .cast<String>(),
+                          dropdownDecoratorProps: const DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                  hintText: "Selectionnez un appartement")),
+                          onChanged: (value) {
+                            setState(() {
+                              selected = value;
+                            });
+                          });
+                    }
+                  },
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(
                     top: 15, left: 15, right: 15, bottom: 7.5),
